@@ -577,10 +577,22 @@
 Bank Name - Account #XXXX-XXXX</textarea>
             </div>
 
+            <!-- Line Items Manager -->
+            <div style="margin-top: 30px; padding: 25px; background: rgba(255,255,255,0.1); border-radius: 12px;">
+                <h3 style="color: white; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+                    📋 Billing Period Line Items
+                    <button class="btn-secondary" onclick="addNewLineItem()" style="padding: 8px 15px;">➕ Add Line Item</button>
+                </h3>
+                
+                <div id="lineItemsManager" style="display: flex; flex-direction: column; gap: 15px;">
+                    <!-- Line items will be rendered here -->
+                </div>
+            </div>
+
             <div class="button-group">
                 <button class="btn-primary" onclick="updateInvoice()">🔄 Update Invoice</button>
                 <button class="btn-secondary" onclick="window.print()">🖨️ Print Invoice</button>
-                <button class="btn-secondary" onclick="addLineItem()">➕ Add Line Item</button>
+                <button class="btn-secondary" onclick="autoGenerateLineItems()">⚡ Auto-Generate from Period</button>
                 <button class="btn-secondary" onclick="resetInvoiceCounter()" style="background: #dc2626;">🔢 Reset Counter</button>
             </div>
         </div>
@@ -716,7 +728,7 @@ Bank Name - Account #XXXX-XXXX</textarea>
                                 <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white"/>
                                 <path d="M2 17L12 22L22 17V12L12 17L2 12V17Z" fill="white"/>
                             </svg>
-                            <span style="color: white; font-weight: 600; font-size: 0.95em;">Send via Zelle</span>
+                            <span style="color: white; font-weight: 600; font-size: 0.95em;">202-468-2942</span>
                         </div>
                     </div>
                 </div>
@@ -733,11 +745,129 @@ Bank Name - Account #XXXX-XXXX</textarea>
     </div>
 
     <script>
-        // Line items storage - Oct 1-15, 2025: 10 hours/week × 2 weeks = 20 hours total
-        let lineItems = [
-            { date: '2025-10-01', description: 'Delegating Nurse Services - Week 1', hours: 10.0 },
-            { date: '2025-10-08', description: 'Delegating Nurse Services - Week 2', hours: 10.0 }
-        ];
+        // Line items storage - dynamically managed by user
+        let lineItems = [];
+
+        // Render line items manager in control panel
+        function renderLineItemsManager() {
+            const container = document.getElementById('lineItemsManager');
+            container.innerHTML = '';
+
+            if (lineItems.length === 0) {
+                container.innerHTML = '<p style="color: white; text-align: center; opacity: 0.7;">No line items yet. Click "Add Line Item" or "Auto-Generate from Period"</p>';
+                return;
+            }
+
+            lineItems.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.style.cssText = 'background: white; padding: 15px; border-radius: 8px; display: grid; grid-template-columns: 150px 1fr 100px 80px; gap: 10px; align-items: center;';
+                
+                itemDiv.innerHTML = `
+                    <div>
+                        <label style="font-size: 0.8em; color: #666; display: block; margin-bottom: 4px;">Date</label>
+                        <input type="date" value="${item.date}" onchange="updateLineItemDate(${index}, this.value)" 
+                               style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.8em; color: #666; display: block; margin-bottom: 4px;">Description</label>
+                        <input type="text" value="${item.description}" onchange="updateLineItemDescription(${index}, this.value)"
+                               style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.8em; color: #666; display: block; margin-bottom: 4px;">Hours</label>
+                        <input type="number" value="${item.hours}" step="0.5" onchange="updateLineItemHours(${index}, this.value)"
+                               style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <button onclick="removeLineItem(${index})" 
+                            style="background: #dc2626; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 1.2em; height: 38px; align-self: end;"
+                            title="Remove this line item">🗑️</button>
+                `;
+                
+                container.appendChild(itemDiv);
+            });
+        }
+
+        // Add a new line item
+        function addNewLineItem() {
+            const startDate = document.getElementById('periodStart').value || new Date().toISOString().split('T')[0];
+            
+            lineItems.push({
+                date: startDate,
+                description: 'Delegating Nurse Services',
+                hours: 10.0
+            });
+            
+            renderLineItemsManager();
+            updateInvoice();
+        }
+
+        // Remove a line item
+        function removeLineItem(index) {
+            if (confirm('Remove this line item?')) {
+                lineItems.splice(index, 1);
+                renderLineItemsManager();
+                updateInvoice();
+            }
+        }
+
+        // Update line item date
+        function updateLineItemDate(index, value) {
+            lineItems[index].date = value;
+            updateInvoice();
+        }
+
+        // Update line item description
+        function updateLineItemDescription(index, value) {
+            lineItems[index].description = value;
+            updateInvoice();
+        }
+
+        // Update line item hours
+        function updateLineItemHours(index, value) {
+            lineItems[index].hours = parseFloat(value) || 0;
+            updateInvoice();
+        }
+
+        // Auto-generate line items based on billing period
+        function autoGenerateLineItems() {
+            const startDate = new Date(document.getElementById('periodStart').value);
+            const endDate = new Date(document.getElementById('periodEnd').value);
+            
+            if (!startDate || !endDate) {
+                alert('Please set Period Start and End dates first!');
+                return;
+            }
+            
+            if (lineItems.length > 0 && !confirm('This will replace existing line items. Continue?')) {
+                return;
+            }
+            
+            // Calculate number of weeks in the period
+            const millisecondsPerDay = 1000 * 60 * 60 * 24;
+            const days = Math.round((endDate - startDate) / millisecondsPerDay) + 1;
+            const weeks = Math.ceil(days / 7);
+            
+            // Clear existing line items
+            lineItems = [];
+            
+            // Generate line items for each week
+            for (let i = 0; i < weeks; i++) {
+                const weekDate = new Date(startDate);
+                weekDate.setDate(startDate.getDate() + (i * 7));
+                
+                // Format date as YYYY-MM-DD
+                const dateStr = weekDate.toISOString().split('T')[0];
+                
+                lineItems.push({
+                    date: dateStr,
+                    description: `Delegating Nurse Services - Week ${i + 1}`,
+                    hours: 10.0
+                });
+            }
+            
+            renderLineItemsManager();
+            updateInvoice();
+        }
 
         // Generate automatic invoice number
         function generateInvoiceNumber() {
@@ -785,7 +915,10 @@ Bank Name - Account #XXXX-XXXX</textarea>
         }
 
         function formatDate(dateString) {
-            const date = new Date(dateString);
+            // Parse date without timezone conversion
+            // Input format: YYYY-MM-DD from date input
+            const [year, month, day] = dateString.split('-');
+            const date = new Date(year, month - 1, day);
             return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
         }
 
@@ -871,8 +1004,7 @@ Bank Name - Account #XXXX-XXXX</textarea>
             
             const paymentInfo = document.getElementById('paymentInfo').value;
             document.getElementById('display-paymentInfo').innerHTML = `
-                ${paymentInfo.replace(/\n/g, '<br>')}<br><br>
-                <strong>Important:</strong> As outlined in the contract, this is a contractual engagement. The contractor is responsible for all applicable taxes, insurance, and licensure requirements. This invoice reflects services provided during the specified billing period.
+                ${paymentInfo.replace(/\n/g, '<br>')}
             `;
             
             document.getElementById('display-contactEmail').textContent = document.getElementById('contractorEmail').value;
@@ -880,13 +1012,14 @@ Bank Name - Account #XXXX-XXXX</textarea>
             const today = new Date();
             document.getElementById('display-generatedDate').textContent = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-            // Re-render line items with new rate
+            // Re-render line items with new rate and dates
             renderLineItems();
         }
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             updateInvoiceNumber();
+            renderLineItemsManager(); // Render the line items manager
             updateInvoice();
         });
 
@@ -894,6 +1027,15 @@ Bank Name - Account #XXXX-XXXX</textarea>
         document.getElementById('invoiceDate').addEventListener('change', function() {
             updateInvoiceNumber();
             updateInvoice();
+        });
+
+        // Update line items manager when period dates change (useful for auto-generation)
+        document.getElementById('periodStart').addEventListener('change', function() {
+            renderLineItemsManager();
+        });
+
+        document.getElementById('periodEnd').addEventListener('change', function() {
+            renderLineItemsManager();
         });
     </script>
 </body>
