@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daytocare Health Services - Invoice</title>
+    
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- PDF Generation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <h2>📋 Invoice Generator</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Facility Name:</label>
+                    <input type="text" id="facilityName" placeholder="Facility Name" oninput="updateInvoiceDisplay()">
+                </div>
+                <div class="form-group">
+                    <label>Address:</label>
+                    <input type="text" id="address" placeholder="Street Address" oninput="updateInvoiceDisplay()">
+                </div>
+                <div class="form-group">
+                    <label>City, State ZIP:</label>
+                    <input type="text" id="city" placeholder="City, State ZIP" oninput="updateInvoiceDisplay()">
+                </div>
+                <div class="form-group">
+                    <label>Phone:</label>
+                    <input type="tel" id="phone" placeholder="(555) 123-4567" oninput="updateInvoiceDisplay()">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="email" placeholder="email@example.com" oninput="updateInvoiceDisplay()">
+                </div>
+                <div class="form-group">
+                    <label>Invoice Number:</label>
+                    <input type="text" id="invoiceNumberInput" readonly style="background: #e0e0e0;">
+                </div>
+                <div class="form-group">
+                    <label>Invoice Date:</label>
+                    <input type="date" id="invoiceDate" oninput="updateInvoiceDisplay()">
+                </div>
+                <div class="form-group">
+                    <label>Billing Period:</label>
+                    <input type="text" id="billingPeriod" placeholder="MM/DD/YYYY to MM/DD/YYYY" oninput="updateInvoiceDisplay()">
+                </div>
+                <div class="form-group">
+                    <label>Hourly Rate ($):</label>
+                    <input type="number" id="hourlyRate" value="45" step="0.01" min="0" oninput="updateLineItemsTable()">
+                </div>
+                <div class="form-group">
+                    <label>Tax Rate (%):</label>
+                    <input type="number" id="taxRate" value="0" step="0.01" min="0" oninput="updateLineItemsTable()">
+                </div>
+                <div class="form-group">
+                    <label>PayPal Email/Username:</label>
+                    <input type="text" id="paypalEmail" placeholder="your.paypal@email.com">
+                    <small style="color: white; font-size: 0.85em; margin-top: 5px; display: block;">For PayPal.me link</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Notes:</label>
+                <textarea id="notes" placeholder="Thank you for your business!" oninput="updateInvoiceDisplay()"></textarea>
+            </div>
+
+            <!-- Line Items Section -->
+            <div class="line-items-section">
+                <h3 style="color: white; margin-bottom: 15px;">Line Items</h3>
+                <div id="lineItemsContainer">
+                    <div class="line-item">
+                        <input type="date" placeholder="Date" oninput="updateLineItemsTable()">
+                        <input type="text" placeholder="Description" oninput="updateLineItemsTable()">
+                        <input type="number" placeholder="Hours" step="0.5" min="0" oninput="updateLineItemsTable()">
+                        <input type="number" placeholder="Rate" step="0.01" min="0" oninput="updateLineItemsTable()">
+                        <button class="remove-line" onclick="removeLineItem(this)" title="Remove line item">×</button>
+                    </div>
+                </div>
+                <button class="add-line-btn" onclick="addLineItem()">+ Add Line Item</button>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" onclick="prefillLineItems()">⚡ Prefill from Period</button>
+                <button class="btn-primary" onclick="fillSampleData()">📝 Fill Sample Data</button>
+                <button class="btn-secondary" onclick="window.print()">🖨️ Print Invoice</button>
+                <button class="btn-secondary" onclick="downloadPDF()">📄 Download PDF</button>
+            </div>
+        </div>
+
+        <!-- Invoice Display -->
+        <div class="invoice-header">
+            <div class="logo-container">
+                <img src="assets/images/dtc_logo.png" alt="Daytocare Health Logo">
+            </div>
+            <h1>INVOICE</h1>
+            <p>Professional Nursing Services</p>
+        </div>
+
+        <div class="invoice-body">
+            <div class="info-section">
+                <div class="info-box">
+                    <h3>From</h3>
+                    <p>
+                        <strong>Company:</strong> Daytocare Health Services<br>
+                        <strong>Address:</strong> 123 Healthcare Lane<br>
+                        <strong>City:</strong> Medical City, MC 12345<br>
+                        <strong>Email:</strong> finance@dtchealthservices.com<br>
+                        <strong>Phone:</strong> (555) 123-4567
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h3>Bill To</h3>
+                    <p>
+                        <strong>Facility:</strong> <span id="displayFacilityName">Facility Name</span><br>
+                        <strong>Address:</strong> <span id="displayAddress">Address</span><br>
+                        <strong>City:</strong> <span id="displayCity">City, State ZIP</span><br>
+                        <strong>Phone:</strong> <span id="displayPhone">Phone</span><br>
+                        <strong>Email:</strong> <span id="displayEmail">Email</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-box">
+                    <h3>Invoice Details</h3>
+                    <p>
+                        <strong>Invoice #:</strong> <span id="displayInvoiceNumber">0001</span><br>
+                        <strong>Date:</strong> <span id="displayInvoiceDate"></span><br>
+                        <strong>Period:</strong> <span id="displayBillingPeriod">Billing Period</span>
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h3>Payment Information</h3>
+                    <p>
+                        <strong>Due:</strong> Net 30 Days<br>
+                        <strong>Terms:</strong> Payment due upon receipt
+                    </p>
+                </div>
+            </div>
+
+            <div class="invoice-details">
+                <h2>Services Provided</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th style="text-align: center;">Hours</th>
+                            <th style="text-align: right;">Rate</th>
+                            <th style="text-align: right;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lineItemsTableBody">
+                        <!-- Line items will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="total-section">
+                <div class="total-row">
+                    <span>Subtotal:</span>
+                    <span id="displaySubtotal">$0.00</span>
+                </div>
+                <div class="total-row">
+                    <span>Tax:</span>
+                    <span id="displayTax">$0.00</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>Total Due:</span>
+                    <span id="displayTotal">$0.00</span>
+                </div>
+            </div>
+
+            <div class="notes-section">
+                <h3>Notes</h3>
+                <p id="displayNotes">Thank you for your business!</p>
+                
+                <!-- Payment Buttons -->
+                <div style="margin-top: 20px; display: flex; gap: 15px; flex-wrap: wrap;">
+                    <a href="#" id="paypalButton" onclick="openPayPalPayment(event)" class="paypal-button">
+                        <div class="paypal-button-label-container" style="background: #FFC439; border-radius: 8px; padding: 12px 24px; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjgiIHZpZXdCb3g9IjAgMCAyNCAyOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsPSIjMDAzMDg3IiBkPSJNIDIwLjkwNSA5LjUgQyAyMS4xMDUgOC40IDIwLjkwNSA3LjcgMjAuMjA1IDYuOSBDIDE5LjQwNSA2IDE3LjkwNSA1LjYgMTUuOTA1IDUuNiBMIDguODA1IDUuNiBDIDguMzA1IDUuNiA3LjkwNSA2IDcuODA1IDYuNCBMIDUuMDA1IDIzLjkgQyA0LjkwNSAyNC40IDUuMzA1IDI0LjggNS44MDUgMjQuOCBMIDkuNzA1IDI0LjggTCAxMC42MDUgMTkuMyBMIDEwLjYwNSAxOS42IEMgMTAuNzA1IDE5LjIgMTEuMTA1IDE4LjggMTEuNjA1IDE4LjggTCAxMy42MDUgMTguOCBDIDE4LjAwNSAxOC44IDE5LjUwNSAxNC4yIDIwLjkwNSA5LjUgWiIvPjxwYXRoIGZpbGw9IiMwMDljZGUiIGQ9Ik0gMjAuOTA1IDkuNSBDIDIxLjEwNSA4LjQgMjAuOTA1IDcuNyAyMC4yMDUgNi45IEMgMTkuNDA1IDYgMTcuOTA1IDUuNiAxNS45MDUgNS42IEwgOC44MDUgNS42IEMgOC4zMDUgNS42IDcuOTA1IDYgNy44MDUgNi40IEwgNS4wMDUgMjMuOSBDIDQuOTA1IDI0LjQgNS4zMDUgMjQuOCA1LjgwNSAyNC44IEwgOS43MDUgMjQuOCBMIDEwLjcwNSAxOC45IEwgMTAuNjA1IDE5LjMgTCAxMC42MDUgMTkuNiBDIDEwLjcwNSAxOS4yIDExLjEwNSAxOC44IDExLjYwNSAxOC44IEwgMTMuNjA1IDE4LjggQyAxOC4wMDUgMTguOCAxOS41MDUgMTQuMiAyMC45MDUgOS41IFoiLz48L3N2Zz4=" alt="PayPal" style="height: 20px;">
+                            <span style="color: #003087; font-weight: 600; font-size: 1em;">Pay with PayPal</span>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="openZellePayment(event)" style="text-decoration: none;">
+                        <div style="background: #6D1ED4; border-radius: 8px; padding: 12px 24px; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s;">
+                            <span style="color: white; font-weight: 600; font-size: 1em;">💰 Pay with Zelle</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p><strong>Daytocare Health Services</strong></p>
+                <p>Professional Healthcare Staffing Solutions</p>
+                <p>finance@dtchealthservices.com | (555) 123-4567</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

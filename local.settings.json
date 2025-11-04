@@ -1,0 +1,14 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "EMAIL_SERVICE": "Mailjet",
+    "MAILJET_API_KEY": "your-mailjet-api-key",
+    "MAILJET_API_SECRET": "your-mailjet-api-secret",
+    "EMAIL_FROM": "finance@dtchealthservices.com",
+    "EMAIL_FROM_NAME": "Daytocare Health Services",
+    "STORAGE_CONNECTION_STRING": "your-azure-storage-connection-string",
+    "COSMOS_DB_CONNECTION": "your-cosmosdb-connection-string"
+  }
+}
