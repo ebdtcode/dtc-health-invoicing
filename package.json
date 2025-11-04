@@ -1,0 +1,36 @@
+{
+  "name": "dtc-health-invoicing-functions",
+  "version": "1.0.0",
+  "description": "Azure Functions for automated invoice generation and delivery",
+  "main": "dist/functions/sendMonthlyInvoices/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rimraf dist",
+    "prestart": "npm run build",
+    "start": "func start",
+    "test": "jest"
+  },
+  "keywords": [
+    "invoice",
+    "automation",
+    "healthcare",
+    "billing",
+    "azure-functions"
+  ],
+  "author": "Daytocare Health Services",
+  "license": "ISC",
+  "dependencies": {
+    "@azure/functions": "^4.5.0",
+    "@azure/storage-blob": "^12.17.0",
+    "node-mailjet": "^6.0.5",
+    "puppeteer": "^24.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/puppeteer": "^7.0.4",
+    "azure-functions-core-tools": "^4.0.5455",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,26 @@
+# Project Structure Reference
+
+## Main Project Files (Tracked in Git)
+- Production Azure Functions code in `/functions`
+- Shared business logic in `/shared`
+- Client data in `/data`
+- Static assets in `/assets`
+- Configuration files in root
+
+## Working Documentation (NOT Tracked in Git)
+- All detailed documentation in `/working_docs`
+- Original HTML reference in `/working_docs/original-invoice.html`
+- Azure setup guide, deployment docs, architecture diagrams
+
+## Utility Scripts
+- Setup and maintenance scripts in `/scripts`
+
+## Quick Commands
+- Build: `npm run build`
+- Start locally: `npm start`
+- Deploy: `func azure functionapp publish dtc-invoice-functions`
+
+## Adding New Documentation
+- Place all working docs in `/working_docs` folder
+- They won't be tracked in git (see .gitignore)
+- Keep README.md minimal and production-focused

@@ -1,0 +1,40 @@
+[
+  {
+    "id": "client-001",
+    "facilityName": "Sunshine Healthcare Facility",
+    "email": "billing@sunshinehealthcare.com",
+    "address": "123 Medical Drive",
+    "city": "Springfield, IL 62701",
+    "phone": "(555) 123-4567",
+    "contactEmail": "manager@sunshinehealthcare.com",
+    "hourlyRate": 65,
+    "billingDay": 15,
+    "active": true,
+    "services": [
+      {
+        "description": "Delegating Nurse Services",
+        "defaultHours": 10,
+        "frequency": "weekly"
+      }
+    ]
+  },
+  {
+    "id": "client-002",
+    "facilityName": "Green Valley Assisted Living",
+    "email": "accounts@greenvalley.com",
+    "address": "456 Care Lane",
+    "city": "Madison, WI 53703",
+    "phone": "(555) 987-6543",
+    "contactEmail": "admin@greenvalley.com",
+    "hourlyRate": 70,
+    "billingDay": 15,
+    "active": true,
+    "services": [
+      {
+        "description": "Nursing Consultation Services",
+        "defaultHours": 8,
+        "frequency": "weekly"
+      }
+    ]
+  }
+]

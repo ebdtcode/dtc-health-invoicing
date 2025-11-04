@@ -1,0 +1,13 @@
+.git*
+.vscode
+local.settings.json
+test
+tsconfig.json
+.funcignore
+*.md
+node_modules/@types
+assets/
+images/
+index.html
+*.ts
+!dist/**/*
