@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daytocare Health Services - Invoice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        daytocare: '#C9354D',
+                        'daytocare-light': '#FFF5F7',
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
     <style>
         * {
             margin: 0;
@@ -17,6 +33,38 @@
             padding: 30px 20px;
             color: #333;
             line-height: 1.4;
+        }
+
+        .nav-bar {
+            max-width: 900px;
+            margin: 0 auto 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: white;
+            color: #C9354D;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: 2px solid white;
         }
 
         .invoice-container {
@@ -277,7 +325,9 @@
             display: flex;
             gap: 15px;
             justify-content: center;
+            align-items: stretch;
             margin-top: 25px;
+            flex-wrap: wrap;
         }
 
         button {
@@ -288,6 +338,17 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-width: 180px;
+        }
+
+        button .icon {
+            font-size: 1.8em;
+            display: block;
         }
 
         .btn-primary {
@@ -308,6 +369,26 @@
 
         .btn-secondary:hover {
             background: #8F2537;
+            transform: translateY(-2px);
+        }
+
+        .btn-download {
+            background: #8B4C52;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #6D3A3F;
+            transform: translateY(-2px);
+        }
+
+        .btn-reset {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #b91c1c;
             transform: translateY(-2px);
         }
 
@@ -497,11 +578,27 @@
         }
     </style>
 </head>
-<body>
-    <div class="invoice-container">
+<body class="bg-gradient-to-br from-daytocare via-red-500 to-pink-600 min-h-screen py-8 px-4">
+    <!-- Navigation Bar -->
+    <nav class="max-w-6xl mx-auto mb-8 bg-white/10 backdrop-blur-md rounded-2xl px-6 py-4 shadow-xl">
+        <div class="flex flex-wrap gap-3 justify-center">
+            <a href="home.html" class="px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-medium rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                🏠 Home
+            </a>
+            <a href="index.html" class="px-6 py-3 bg-white text-daytocare font-semibold rounded-xl transition-all duration-300 shadow-lg border-2 border-white">
+                📄 Invoice Generator
+            </a>
+            <a href="timesheet.html" class="px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-medium rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                📊 Timesheet Generator
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Main Container -->
+    <div class="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
         <!-- Control Panel -->
-        <div class="control-panel">
-            <h2>📋 Invoice Generator</h2>
+        <div class="bg-gradient-to-r from-daytocare to-red-500 p-8">
+            <h2 class="text-3xl font-bold text-white mb-6">📋 Invoice Generator</h2>
             
             <div class="form-grid">
                 <div class="form-group">
@@ -590,10 +687,26 @@ Bank Name - Account #XXXX-XXXX</textarea>
             </div>
 
             <div class="button-group">
-                <button class="btn-primary" onclick="updateInvoice()">🔄 Update Invoice</button>
-                <button class="btn-secondary" onclick="window.print()">🖨️ Print Invoice</button>
-                <button class="btn-secondary" onclick="autoGenerateLineItems()">⚡ Auto-Generate from Period</button>
-                <button class="btn-secondary" onclick="resetInvoiceCounter()" style="background: #dc2626;">🔢 Reset Counter</button>
+                <button class="btn-primary" onclick="updateInvoice()">
+                    <span class="icon">🔄</span>
+                    <span>Update<br>Invoice</span>
+                </button>
+                <button class="btn-secondary" onclick="window.print()">
+                    <span class="icon">🖨️</span>
+                    <span>Print<br>Invoice</span>
+                </button>
+                <button class="btn-download" onclick="downloadPDF()">
+                    <span class="icon">📄</span>
+                    <span>Download<br>PDF</span>
+                </button>
+                <button class="btn-secondary" onclick="autoGenerateLineItems()">
+                    <span class="icon">⚡</span>
+                    <span>Auto-Generate<br>from Period</span>
+                </button>
+                <button class="btn-reset" onclick="resetInvoiceCounter()">
+                    <span class="icon">🔢</span>
+                    <span>Reset<br>Counter</span>
+                </button>
             </div>
         </div>
 
@@ -976,6 +1089,11 @@ Bank Name - Account #XXXX-XXXX</textarea>
 
             lineItems.push({ date: newDate, description, hours });
             renderLineItems();
+        }
+
+        function downloadPDF() {
+            // Open browser's print dialog, which allows saving as PDF
+            window.print();
         }
 
         function updateInvoice() {

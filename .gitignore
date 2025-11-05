@@ -1,0 +1,40 @@
+# Working documentation
+working_docs/
+
+# Node modules and dependencies
+node_modules/
+package-lock.json
+
+# Azure Functions
+local.settings.json
+.vscode/
+dist/
+__blobstorage__/
+__queuestorage__/
+__azurite_db*__.json
+.python_packages/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+build/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+*.swp
+*.swo
+*~
+.idea/
+*.sublime-*
+
+# Temporary files
+*.tmp
+*.bak
+.cache/
