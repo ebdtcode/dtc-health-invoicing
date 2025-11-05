@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daytocare Health Services - Document Generators</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        daytocare: '#C9354D',
+                        'daytocare-light': '#FFF5F7',
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Keep minimal custom styles if needed */
+    </style>
+</head>
+<body class="bg-gradient-to-br from-daytocare via-red-500 to-pink-600 min-h-screen flex items-center justify-center px-4 py-12">
+    <div class="w-full max-w-6xl mx-auto">
+        <!-- Header Section -->
+        <header class="text-center mb-16">
+            <!-- Logo -->
+            <div class="inline-block bg-white/95 backdrop-blur-sm px-8 py-4 rounded-2xl shadow-2xl mb-8 transform hover:scale-105 transition-transform duration-300">
+                <img src="images/dtc_logo.png" alt="Daytocare Health Services" class="h-16 w-auto">
+            </div>
+            
+            <!-- Title -->
+            <h1 class="text-5xl md:text-6xl font-light text-white mb-4 tracking-wide">
+                Document Generators
+            </h1>
+            <p class="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
+                Create professional invoices and timesheets for your healthcare services
+            </p>
+        </header>
+
+        <!-- Generators Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+            
+            <!-- Invoice Generator Card -->
+            <a href="index.html" class="group block bg-white rounded-3xl overflow-hidden shadow-2xl hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 transform">
+                <div class="p-10 lg:p-12">
+                    <!-- Icon -->
+                    <div class="text-6xl mb-6 transform group-hover:scale-110 transition-transform duration-300">
+                        📄
+                    </div>
+                    
+                    <!-- Title -->
+                    <h2 class="text-3xl font-semibold text-daytocare mb-4 group-hover:text-red-500 transition-colors">
+                        Invoice Generator
+                    </h2>
+                    
+                    <!-- Description -->
+                    <p class="text-gray-600 text-lg leading-relaxed mb-6">
+                        Generate professional invoices with flexible billing schedules and automatic calculations
+                    </p>
+                    
+                    <!-- Features -->
+                    <div class="flex flex-wrap gap-2 mb-8">
+                        <span class="bg-daytocare-light text-daytocare px-4 py-2 rounded-full text-sm font-medium">
+                            Multiple Schedules
+                        </span>
+                        <span class="bg-daytocare-light text-daytocare px-4 py-2 rounded-full text-sm font-medium">
+                            Auto Calculate
+                        </span>
+                        <span class="bg-daytocare-light text-daytocare px-4 py-2 rounded-full text-sm font-medium">
+                            PDF Ready
+                        </span>
+                    </div>
+                    
+                    <!-- Button -->
+                    <div class="bg-gradient-to-r from-daytocare to-red-500 text-white px-8 py-4 rounded-xl font-semibold text-lg inline-block group-hover:shadow-xl transition-all duration-300 group-hover:from-red-500 group-hover:to-daytocare">
+                        Create Invoice →
+                    </div>
+                </div>
+            </a>
+
+            <!-- Timesheet Generator Card -->
+            <a href="timesheet.html" class="group block bg-white rounded-3xl overflow-hidden shadow-2xl hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 transform">
+                <div class="p-10 lg:p-12">
+                    <!-- Icon -->
+                    <div class="text-6xl mb-6 transform group-hover:scale-110 transition-transform duration-300">
+                        📊
+                    </div>
+                    
+                    <!-- Title -->
+                    <h2 class="text-3xl font-semibold text-daytocare mb-4 group-hover:text-red-500 transition-colors">
+                        Timesheet Generator
+                    </h2>
+                    
+                    <!-- Description -->
+                    <p class="text-gray-600 text-lg leading-relaxed mb-6">
+                        Create bi-weekly timesheets with flexible hour distribution and Excel export
+                    </p>
+                    
+                    <!-- Features -->
+                    <div class="flex flex-wrap gap-2 mb-8">
+                        <span class="bg-daytocare-light text-daytocare px-4 py-2 rounded-full text-sm font-medium">
+                            Bi-Weekly
+                        </span>
+                        <span class="bg-daytocare-light text-daytocare px-4 py-2 rounded-full text-sm font-medium">
+                            Excel Export
+                        </span>
+                        <span class="bg-daytocare-light text-daytocare px-4 py-2 rounded-full text-sm font-medium">
+                            Quick Fill
+                        </span>
+                    </div>
+                    
+                    <!-- Button -->
+                    <div class="bg-gradient-to-r from-daytocare to-red-500 text-white px-8 py-4 rounded-xl font-semibold text-lg inline-block group-hover:shadow-xl transition-all duration-300 group-hover:from-red-500 group-hover:to-daytocare">
+                        Create Timesheet →
+                    </div>
+                </div>
+            </a>
+
+        </div>
+        
+        <!-- Footer Text -->
+        <div class="text-center mt-16 text-white/80 text-sm">
+            <p>Professional document management for healthcare providers</p>
+        </div>
+    </div>
+</body>
+</html>

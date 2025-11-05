@@ -1,15 +1,14 @@
-# Dependencies
+# Working documentation
+working_docs/
+
+# Node modules and dependencies
 node_modules/
 package-lock.json
 
-# Build output
-dist/
-*.js
-*.js.map
-!assets/**/*.js
-
 # Azure Functions
 local.settings.json
+.vscode/
+dist/
 __blobstorage__/
 __queuestorage__/
 __azurite_db*__.json
@@ -20,41 +19,22 @@ __azurite_db*__.json
 .env.local
 .env.*.local
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Build outputs
+build/
+*.log
 
-# OS
+# OS files
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-logs/
-npm-debug.log*
-
-# TypeScript
-*.tsbuildinfo
-
-# Testing
-coverage/
-.nyc_output/
+# IDE files
+*.swp
+*.swo
+*~
+.idea/
+*.sublime-*
 
 # Temporary files
-tmp/
-temp/
 *.tmp
-
-# Backup files
-*.backup
-*-old.*
-
-# Working documentation (not tracked)
-working_docs/
-
-# Public folder can be deployed separately
-# Uncomment the line below if you don't want to track the UI in git
-# public/
+*.bak
+.cache/
