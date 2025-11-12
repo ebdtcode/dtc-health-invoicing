@@ -1493,6 +1493,49 @@
                 statusDiv.style.display = 'none';
             }, 5000);
         }
+
+        // Initialize floating labels on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle all inputs, selects, and textareas
+            const formGroups = document.querySelectorAll('.form-group');
+
+            formGroups.forEach(group => {
+                const input = group.querySelector('input, select, textarea');
+                if (!input) return;
+
+                // Check initial value and add has-value class if needed
+                function updateLabelState() {
+                    if (input.value && input.value.trim() !== '') {
+                        group.classList.add('has-value');
+                    } else {
+                        group.classList.remove('has-value');
+                    }
+                }
+
+                // Update on initial load
+                updateLabelState();
+
+                // Update on input change
+                input.addEventListener('input', updateLabelState);
+                input.addEventListener('change', updateLabelState);
+
+                // Special handling for date inputs (they always need the label floated when they have a value)
+                if (input.type === 'date') {
+                    input.addEventListener('blur', updateLabelState);
+                }
+
+                // Special handling for selects
+                if (input.tagName === 'SELECT') {
+                    input.addEventListener('change', function() {
+                        if (input.value !== '') {
+                            group.classList.add('has-value');
+                        } else {
+                            group.classList.remove('has-value');
+                        }
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>

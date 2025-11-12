@@ -1140,6 +1140,46 @@ Bank Name - Account #XXXX-XXXX</textarea>
             updateInvoiceNumber();
             renderLineItemsManager(); // Render the line items manager
             updateInvoice();
+
+            // Initialize floating labels
+            const formGroups = document.querySelectorAll('.form-group');
+
+            formGroups.forEach(group => {
+                const input = group.querySelector('input, select, textarea');
+                if (!input) return;
+
+                // Check initial value and add has-value class if needed
+                function updateLabelState() {
+                    if (input.value && input.value.trim() !== '') {
+                        group.classList.add('has-value');
+                    } else {
+                        group.classList.remove('has-value');
+                    }
+                }
+
+                // Update on initial load
+                updateLabelState();
+
+                // Update on input change
+                input.addEventListener('input', updateLabelState);
+                input.addEventListener('change', updateLabelState);
+
+                // Special handling for date inputs
+                if (input.type === 'date') {
+                    input.addEventListener('blur', updateLabelState);
+                }
+
+                // Special handling for selects
+                if (input.tagName === 'SELECT') {
+                    input.addEventListener('change', function() {
+                        if (input.value !== '') {
+                            group.classList.add('has-value');
+                        } else {
+                            group.classList.remove('has-value');
+                        }
+                    });
+                }
+            });
         });
 
         // Update invoice number when invoice date changes
