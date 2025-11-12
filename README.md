@@ -46,21 +46,35 @@ dtc-health-invoicing/
 
 ## 🚀 Quick Start
 
-### Web UI (Invoice Management)
+### Standalone Web App (No Azure Functions Required)
 
-1. Start the backend:
-   ```bash
-   npm install
-   npm run build
-   npm start
-   ```
+The invoice and timesheet generators work entirely in the browser - no backend needed!
 
-2. Open the web interface:
-   ```bash
-   open public/index.html
-   ```
+**Option 1: Using npm (Recommended)**
+```bash
+npm install
+npm start
+```
+This will open http://localhost:8080 in your browser.
 
-3. Use the UI to send invoices to individual clients or all at once
+**Option 2: Using Python**
+```bash
+python3 -m http.server 8080
+```
+Then open http://localhost:8080/home.html
+
+**Option 3: Direct file access**
+Just open `home.html` directly in your browser (some features may be limited).
+
+### Features Available Without Backend:
+- ✅ Invoice generation (client-side PDF)
+- ✅ Timesheet generation (Excel export)
+- ✅ Local storage for drafts
+- ✅ All calculations and formatting
+
+### Optional: Azure Functions Backend (For Automated Email Delivery)
+
+If you want automated email delivery, see [AZURE_SETUP.md](./working_docs/AZURE_SETUP.md).
 
 ### Backend API (Automated Invoicing)
 

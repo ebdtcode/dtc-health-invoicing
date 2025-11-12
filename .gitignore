@@ -1,40 +1,111 @@
-# Working documentation
+# Project documentation drafts
 working_docs/
 
-# Node modules and dependencies
+# Dependency directories
 node_modules/
-package-lock.json
+jspm_packages/
+bower_components/
+.pnp/
+.pnp.js
+.python_packages/
 
-# Azure Functions
+# Package manager files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Azure Functions local artifacts
 local.settings.json
-.vscode/
-dist/
+host.json
 __blobstorage__/
 __queuestorage__/
 __azurite_db*__.json
-.python_packages/
 
-# Environment variables
+# Python caches and build outputs
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+build/
+dist/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+pip-wheel-metadata/
+.pytest_cache/
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+env.bak/
+venv.bak/
+ENV/
+env.local/
+
+# TypeScript & JavaScript build artifacts
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+out/
+tmp/
+temp/
+.cache/
+.next/
+.nuxt/
+.turbo/
+.parcel-cache/
+.sass-cache/
+.eslintcache
+.stylelintcache
+coverage/
+.nyc_output/
+
+# Logs & diagnostics
+logs/
+*.log
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+report.*.json
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Environment variables & secrets
 .env
 .env.local
 .env.*.local
+.envrc
+.secrets/
 
-# Build outputs
-build/
-*.log
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# IDE files
+# IDE & editor files
+.vscode/
+.idea/
+.history/
+*.sublime-*
 *.swp
 *.swo
 *~
-.idea/
-*.sublime-*
 
-# Temporary files
-*.tmp
-*.bak
-.cache/
+# Jupyter
+.ipynb_checkpoints/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+Desktop.ini

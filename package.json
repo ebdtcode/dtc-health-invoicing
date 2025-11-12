@@ -1,5 +1,17 @@
 {
+  "name": "dtc-health-invoicing",
+  "version": "1.0.0",
+  "description": "Healthcare invoicing and timesheet generation system",
+  "scripts": {
+    "start": "npx http-server . -p 8080 -o home.html",
+    "dev": "npx live-server --port=8080 --open=home.html",
+    "serve": "python3 -m http.server 8080"
+  },
   "dependencies": {
     "exceljs": "^4.4.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
   }
 }
