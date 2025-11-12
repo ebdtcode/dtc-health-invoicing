@@ -126,34 +126,36 @@
         }
 
         .form-section {
-            background: linear-gradient(135deg, var(--surface-alt), var(--surface-muted));
-            padding: 28px;
-            border-radius: 18px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(201, 53, 77, 0.15);
-            box-shadow: 0 18px 40px rgba(201, 53, 77, 0.12);
-            backdrop-filter: blur(8px);
+            background: linear-gradient(135deg, rgba(255, 245, 247, 0.95), rgba(255, 255, 255, 0.9));
+            padding: 32px;
+            border-radius: 20px;
+            margin-bottom: 32px;
+            border: 2px solid rgba(201, 53, 77, 0.1);
+            box-shadow: 0 10px 30px rgba(201, 53, 77, 0.08);
         }
 
         .form-section h2 {
-            color: var(--daytocare);
-            font-size: 1.35em;
-            margin-bottom: 22px;
+            color: #C9354D;
+            font-size: 1.5em;
+            margin-bottom: 28px;
             font-weight: 700;
             letter-spacing: 0.02em;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(201, 53, 77, 0.15);
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
+            gap: 24px;
+            margin-bottom: 0;
         }
 
         .form-group {
+            position: relative;
             display: flex;
             flex-direction: column;
         }
@@ -162,31 +164,79 @@
             grid-column: 1 / -1;
         }
 
-        label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #555;
+        .form-group label {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-weight: 500;
             font-size: 0.95em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            background: white;
+            padding: 0 6px;
+            border-radius: 4px;
         }
 
-        input, select, textarea {
-            padding: 12px 15px;
+        .form-group.textarea-group label {
+            top: 24px;
+            transform: none;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 16px 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 0.95em;
             transition: all 0.3s ease;
             font-family: inherit;
+            background: white;
+            color: #1f2937;
         }
 
-        input:focus, select:focus, textarea:focus {
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: #C9354D;
-            box-shadow: 0 0 0 3px rgba(201, 53, 77, 0.1);
+            box-shadow: 0 0 0 4px rgba(201, 53, 77, 0.15);
         }
 
-        textarea {
+        .form-group input:focus + label,
+        .form-group textarea:focus + label,
+        .form-group select:focus + label,
+        .form-group input:not(:placeholder-shown) + label,
+        .form-group textarea:not(:placeholder-shown) + label,
+        .form-group select:not([value=""]) + label,
+        .form-group.has-value label {
+            top: 0;
+            font-size: 0.75em;
+            font-weight: 600;
+            color: #C9354D;
+            background: white;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: transparent;
+        }
+
+        .form-group textarea {
             resize: vertical;
-            min-height: 60px;
+            min-height: 100px;
+            padding-top: 18px;
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
         }
 
         .progress-section {
@@ -322,70 +372,84 @@
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 14px 28px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 0.95em;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: none;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: relative;
+            overflow: hidden;
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--daytocare) 0%, #d94d62 100%);
+            background: linear-gradient(135deg, #C9354D 0%, #D84A5F 100%);
             color: white;
         }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #ad2f42 0%, #c23f52 100%);
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, #A82C41 0%, #C9354D 100%);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #68717a 0%, #4f5861 100%);
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
             color: white;
         }
 
-        .btn-secondary:hover {
-            background: linear-gradient(135deg, #535b63 0%, #434a52 100%);
+        .btn-secondary:hover:not(:disabled) {
+            background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #33c168 0%, #1fb889 100%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
         }
 
-        .btn-success:hover {
-            background: linear-gradient(135deg, #28a35a 0%, #1a9f76 100%);
+        .btn-success:hover:not(:disabled) {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
         }
 
         .btn-small {
-            padding: 6px 12px;
+            padding: 8px 16px;
             font-size: 0.85em;
+            border-radius: 10px;
         }
 
         .btn-delete {
-            background: #dc3545;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: white;
         }
 
-        .btn-delete:hover {
-            background: #c82333;
+        .btn-delete:hover:not(:disabled) {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
         }
 
         .btn-edit {
-            background: #ffc107;
-            color: #333;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
         }
 
-        .btn-edit:hover {
-            background: #e0a800;
+        .btn-edit:hover:not(:disabled) {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
         }
 
         .add-entry-form {
@@ -527,20 +591,27 @@
         }
 
         .prepopulate-btn {
-            padding: 12px;
+            padding: 16px 20px;
             border: 2px solid #C9354D;
             background: white;
             color: #C9354D;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
         }
 
         .prepopulate-btn:hover {
-            background: #C9354D;
+            background: linear-gradient(135deg, #C9354D 0%, #D84A5F 100%);
             color: white;
+            border-color: #C9354D;
             transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(201, 53, 77, 0.3);
+        }
+
+        .prepopulate-btn:active {
+            transform: translateY(0);
         }
 
         @media (max-width: 768px) {
@@ -627,33 +698,33 @@
                 <h2>📋 Timesheet Information</h2>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="clientSelect">Facility/Client *</label>
-                        <select id="clientSelect" required>
+                        <select id="clientSelect" placeholder=" " required>
                             <option value="">Select a facility...</option>
                             <option value="client-001">Sunshine Healthcare Facility</option>
                             <option value="client-002">Green Valley Care Center</option>
                             <option value="client-003">Maple Grove Senior Living</option>
                         </select>
+                        <label for="clientSelect">Facility/Client *</label>
                     </div>
 
                     <div class="form-group">
+                        <input type="date" id="cycleEndDate" placeholder=" " required>
                         <label for="cycleEndDate">Cycle Ending Date *</label>
-                        <input type="date" id="cycleEndDate" required>
                     </div>
 
                     <div class="form-group">
+                        <input type="text" id="providerName" placeholder=" " required>
                         <label for="providerName">Service Provider Name *</label>
-                        <input type="text" id="providerName" placeholder="e.g., Josephine Bamba" required>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group has-value">
+                        <input type="number" id="targetHours" placeholder=" " value="60" min="1" step="0.5">
                         <label for="targetHours">Target Hours (Bi-Weekly)</label>
-                        <input type="number" id="targetHours" value="60" min="1" step="0.5">
                     </div>
 
-                    <div class="form-group full-width">
+                    <div class="form-group textarea-group full-width">
+                        <textarea id="notes" placeholder=" "></textarea>
                         <label for="notes">Additional Notes (Optional)</label>
-                        <textarea id="notes" placeholder="Any special notes or comments..."></textarea>
                     </div>
                 </div>
             </div>
