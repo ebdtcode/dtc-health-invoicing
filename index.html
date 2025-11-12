@@ -679,7 +679,7 @@ Bank Name - Account #XXXX-XXXX</textarea>
             <div style="margin-top: 30px; padding: 25px; background: rgba(255,255,255,0.1); border-radius: 12px;">
                 <h3 style="color: white; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
                     📋 Billing Period Line Items
-                    <button class="btn-secondary" onclick="addNewLineItem()" style="padding: 8px 15px;">➕ Add Line Item</button>
+                    <button class="btn-secondary" id="addLineItemBtn" style="padding: 8px 15px;">➕ Add Line Item</button>
                 </h3>
                 
                 <div id="lineItemsManager" style="display: flex; flex-direction: column; gap: 15px;">
@@ -688,23 +688,23 @@ Bank Name - Account #XXXX-XXXX</textarea>
             </div>
 
             <div class="button-group">
-                <button class="btn-primary" onclick="updateInvoice()">
+                <button class="btn-primary" id="updateInvoiceBtn">
                     <span class="icon">🔄</span>
                     <span>Update<br>Invoice</span>
                 </button>
-                <button class="btn-secondary" onclick="window.print()">
+                <button class="btn-secondary" id="printInvoiceBtn">
                     <span class="icon">🖨️</span>
                     <span>Print<br>Invoice</span>
                 </button>
-                <button class="btn-download" onclick="downloadPDF()">
+                <button class="btn-download" id="downloadPDFBtn">
                     <span class="icon">📄</span>
                     <span>Download<br>PDF</span>
                 </button>
-                <button class="btn-secondary" onclick="autoGenerateLineItems()">
+                <button class="btn-secondary" id="autoGenerateBtn">
                     <span class="icon">⚡</span>
                     <span>Auto-Generate<br>from Period</span>
                 </button>
-                <button class="btn-reset" onclick="resetInvoiceCounter()">
+                <button class="btn-reset" id="resetCounterBtn">
                     <span class="icon">🔢</span>
                     <span>Reset<br>Counter</span>
                 </button>
@@ -875,28 +875,52 @@ Bank Name - Account #XXXX-XXXX</textarea>
             lineItems.forEach((item, index) => {
                 const itemDiv = document.createElement('div');
                 itemDiv.style.cssText = 'background: white; padding: 15px; border-radius: 8px; display: grid; grid-template-columns: 150px 1fr 100px 80px; gap: 10px; align-items: center;';
-                
+                itemDiv.setAttribute('data-line-index', index);
+
                 itemDiv.innerHTML = `
                     <div>
                         <label style="font-size: 0.8em; color: #666; display: block; margin-bottom: 4px;">Date</label>
-                        <input type="date" value="${item.date}" onchange="updateLineItemDate(${index}, this.value)" 
+                        <input type="date" value="${item.date}" data-field="date"
                                style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;">
                     </div>
                     <div>
                         <label style="font-size: 0.8em; color: #666; display: block; margin-bottom: 4px;">Description</label>
-                        <input type="text" value="${item.description}" onchange="updateLineItemDescription(${index}, this.value)"
+                        <input type="text" value="${item.description}" data-field="description"
                                style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;">
                     </div>
                     <div>
                         <label style="font-size: 0.8em; color: #666; display: block; margin-bottom: 4px;">Hours</label>
-                        <input type="number" value="${item.hours}" step="0.5" onchange="updateLineItemHours(${index}, this.value)"
+                        <input type="number" value="${item.hours}" step="0.5" data-field="hours"
                                style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;">
                     </div>
-                    <button onclick="removeLineItem(${index})" 
+                    <button class="remove-line-item-btn" data-index="${index}"
                             style="background: #dc2626; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 1.2em; height: 38px; align-self: end;"
                             title="Remove this line item">🗑️</button>
                 `;
-                
+
+                // Add event listeners for inputs
+                const dateInput = itemDiv.querySelector('[data-field="date"]');
+                const descInput = itemDiv.querySelector('[data-field="description"]');
+                const hoursInput = itemDiv.querySelector('[data-field="hours"]');
+
+                dateInput.addEventListener('change', function() {
+                    updateLineItemDate(index, this.value);
+                });
+
+                descInput.addEventListener('change', function() {
+                    updateLineItemDescription(index, this.value);
+                });
+
+                hoursInput.addEventListener('change', function() {
+                    updateLineItemHours(index, this.value);
+                });
+
+                // Add event listener for delete button
+                const deleteBtn = itemDiv.querySelector('.remove-line-item-btn');
+                deleteBtn.addEventListener('click', function() {
+                    removeLineItem(index);
+                });
+
                 container.appendChild(itemDiv);
             });
         }
@@ -1140,6 +1164,16 @@ Bank Name - Account #XXXX-XXXX</textarea>
             updateInvoiceNumber();
             renderLineItemsManager(); // Render the line items manager
             updateInvoice();
+
+            // Add event listeners for buttons (avoiding inline onclick for CSP compatibility)
+            document.getElementById('updateInvoiceBtn').addEventListener('click', updateInvoice);
+            document.getElementById('printInvoiceBtn').addEventListener('click', function() {
+                window.print();
+            });
+            document.getElementById('downloadPDFBtn').addEventListener('click', downloadPDF);
+            document.getElementById('autoGenerateBtn').addEventListener('click', autoGenerateLineItems);
+            document.getElementById('resetCounterBtn').addEventListener('click', resetInvoiceCounter);
+            document.getElementById('addLineItemBtn').addEventListener('click', addNewLineItem);
 
             // Initialize floating labels
             const formGroups = document.querySelectorAll('.form-group');

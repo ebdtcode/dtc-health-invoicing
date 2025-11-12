@@ -760,16 +760,16 @@
                     Choose a template to quickly populate your timesheet
                 </p>
                 <div class="prepopulate-options">
-                    <button class="prepopulate-btn" onclick="prepopulate5Days()">
+                    <button class="prepopulate-btn" data-prepopulate="5days">
                         5 Days × 12 hrs<br><small>(Mon-Fri)</small>
                     </button>
-                    <button class="prepopulate-btn" onclick="prepopulate6Days()">
+                    <button class="prepopulate-btn" data-prepopulate="6days">
                         6 Days × 10 hrs<br><small>(Mon-Sat)</small>
                     </button>
-                    <button class="prepopulate-btn" onclick="prepopulate7Days()">
+                    <button class="prepopulate-btn" data-prepopulate="7days">
                         7 Days × 8.5 hrs<br><small>(Every day)</small>
                     </button>
-                    <button class="prepopulate-btn" onclick="prepopulateWeekends()">
+                    <button class="prepopulate-btn" data-prepopulate="weekends">
                         Weekends Only<br><small>(Sat-Sun, 12 hrs)</small>
                     </button>
                 </div>
@@ -779,7 +779,7 @@
             <div class="timesheet-entries">
                 <div class="entry-header">
                     <h3>⏰ Time Entries</h3>
-                    <button class="btn btn-secondary btn-small" onclick="toggleAddForm()">
+                    <button class="btn btn-secondary btn-small" id="toggleAddFormBtn">
                         + Add Entry
                     </button>
                 </div>
@@ -796,7 +796,7 @@
                             <input type="number" id="entryHours" min="0.5" max="24" step="0.5" placeholder="8" required>
                         </div>
                         <div>
-                            <button class="btn btn-success btn-small" onclick="addEntry()">Add</button>
+                            <button class="btn btn-success btn-small" id="addEntryBtn">Add</button>
                         </div>
                     </div>
                 </div>
@@ -811,13 +811,13 @@
 
             <!-- Action Buttons -->
             <div class="action-buttons">
-                <button class="btn btn-secondary" onclick="saveDraft()">
+                <button class="btn btn-secondary" id="saveDraftBtn">
                     💾 Save Draft
                 </button>
-                <button class="btn btn-secondary" onclick="clearAll()">
+                <button class="btn btn-secondary" id="clearAllBtn">
                     🗑️ Clear All
                 </button>
-                <button class="btn btn-primary" onclick="generateAndSend()" id="generateBtn">
+                <button class="btn btn-primary" id="generateBtn">
                     📊 Generate Timesheet
                 </button>
             </div>
@@ -954,11 +954,24 @@
                     </div>
                     <div class="entry-hours">${entry.hours} hours</div>
                     <div class="entry-actions">
-                        <button class="btn btn-edit btn-small" onclick="editEntry(${index})">Edit</button>
-                        <button class="btn btn-delete btn-small" onclick="deleteEntry(${index})">Delete</button>
+                        <button class="btn btn-edit btn-small" data-action="edit" data-index="${index}">Edit</button>
+                        <button class="btn btn-delete btn-small" data-action="delete" data-index="${index}">Delete</button>
                     </div>
                 </div>
             `).join('');
+
+            // Add event listeners to newly created buttons
+            list.querySelectorAll('[data-action="edit"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    editEntry(parseInt(this.getAttribute('data-index')));
+                });
+            });
+
+            list.querySelectorAll('[data-action="delete"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    deleteEntry(parseInt(this.getAttribute('data-index')));
+                });
+            });
         }
 
         function updateProgress() {
@@ -1496,6 +1509,34 @@
 
         // Initialize floating labels on page load
         document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners for buttons (avoiding inline onclick for CSP compatibility)
+            document.getElementById('toggleAddFormBtn').addEventListener('click', toggleAddForm);
+            document.getElementById('addEntryBtn').addEventListener('click', addEntry);
+            document.getElementById('saveDraftBtn').addEventListener('click', saveDraft);
+            document.getElementById('clearAllBtn').addEventListener('click', clearAll);
+            document.getElementById('generateBtn').addEventListener('click', generateAndSend);
+
+            // Prepopulate buttons
+            document.querySelectorAll('[data-prepopulate]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const type = this.getAttribute('data-prepopulate');
+                    switch(type) {
+                        case '5days':
+                            prepopulate5Days();
+                            break;
+                        case '6days':
+                            prepopulate6Days();
+                            break;
+                        case '7days':
+                            prepopulate7Days();
+                            break;
+                        case 'weekends':
+                            prepopulateWeekends();
+                            break;
+                    }
+                });
+            });
+
             // Handle all inputs, selects, and textareas
             const formGroups = document.querySelectorAll('.form-group');
 
